@@ -20,9 +20,9 @@ find_package_handle_standard_args(GMP DEFAULT_MSG
                                   GMP_INCLUDE_DIR GMP_LIBRARY)
 
 if(GMP_FOUND AND NOT TARGET GMP::GMP)
-    add_library(GMP::GMP INTERFACE IMPORTED)
+    add_library(GMP::GMP UNKNOWN IMPORTED)
     target_include_directories(GMP::GMP INTERFACE ${GMP_INCLUDE_DIR})
-    target_link_libraries(GMP::GMP INTERFACE ${GMP_LIBRARY})
+    set_target_properties(GMP::GMP PROPERTIES IMPORTED_LOCATION ${GMP_LIBRARY})
 endif()
 
 set(GMP_LIBRARIES GMP::GMP)
