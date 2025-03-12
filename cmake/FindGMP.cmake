@@ -14,9 +14,18 @@ find_path(GMP_INCLUDE_DIR
   ${INCLUDE_INSTALL_DIR}
 )
 
-find_library(GMP_LIBRARIES gmp PATHS $ENV{GMPDIR} ${LIB_INSTALL_DIR})
+find_library(GMP_LIBRARY gmp PATHS $ENV{GMPDIR} ${LIB_INSTALL_DIR})
+
+find_package_handle_standard_args(GMP DEFAULT_MSG
+                                  GMP_INCLUDE_DIR GMP_LIBRARY)
+
+if(GMP_FOUND AND NOT TARGET GMP::GMP)
+    add_library(GMP::GMP UNKNOWN IMPORTED)
+    target_include_directories(GMP::GMP INTERFACE ${GMP_INCLUDE_DIR})
+    set_target_properties(GMP::GMP PROPERTIES IMPORTED_LOCATION ${GMP_LIBRARY})
+endif()
+
+set(GMP_LIBRARIES GMP::GMP)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(GMP DEFAULT_MSG
-                                  GMP_INCLUDE_DIR GMP_LIBRARIES)
 mark_as_advanced(GMP_INCLUDE_DIR GMP_LIBRARIES)
